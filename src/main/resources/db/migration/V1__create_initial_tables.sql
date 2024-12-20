@@ -1,54 +1,67 @@
 -- Tabla Usuario
 CREATE TABLE usuario (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    correo_electronico VARCHAR(255) NOT NULL,
-    contrasena VARCHAR(255) NOT NULL
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  correoelectronico VARCHAR(100) NOT NULL,
+  contrasena VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX ui_usuario_nombre (nombre ASC) VISIBLE,
+  UNIQUE INDEX ui_usuario_correoelectronico (correoelectronico ASC) VISIBLE
 );
 
 -- Tabla Perfil
 CREATE TABLE perfil (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX ui_perfil_nombre (nombre ASC) VISIBLE
 );
 
 -- Tabla Curso
 CREATE TABLE curso (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    categoria VARCHAR(255) NOT NULL
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  categoria VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX ui_curso_nombre (nombre ASC) VISIBLE
 );
 
--- Tabla Tópico
+-- Tabla Topico
 CREATE TABLE topico (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    mensaje TEXT NOT NULL,
-    fecha_creacion DATETIME NOT NULL,
-    estado VARCHAR(50),
-    autor_id BIGINT,
-    curso_id BIGINT,
-    FOREIGN KEY (autor_id) REFERENCES usuario(id),
-    FOREIGN KEY (curso_id) REFERENCES curso(id)
-);
-
--- Tabla Respuesta
-CREATE TABLE respuesta (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    mensaje TEXT NOT NULL,
-    fecha_creacion DATETIME NOT NULL,
-    topico_id BIGINT,
-    autor_id BIGINT,
-    solucion BOOLEAN,
-    FOREIGN KEY (topico_id) REFERENCES topico(id),
-    FOREIGN KEY (autor_id) REFERENCES usuario(id)
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(100) NOT NULL,
+  mensaje VARCHAR(500) NOT NULL,
+  fechacreacion DATETIME NOT NULL,
+  estado VARCHAR(50) NOT NULL,
+  usuario_id BIGINT NOT NULL,
+  curso_id BIGINT NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX ui_topico_titulo_mensaje (titulo ASC, mensaje ASC) VISIBLE,
+  CONSTRAINT fk_topico_usuario_id
+    FOREIGN KEY (usuario_id)
+    REFERENCES usuario (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_topico_curso_id
+    FOREIGN KEY (curso_id)
+    REFERENCES curso (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
 );
 
 -- Tabla intermedia Usuario_Perfil (relación muchos a muchos)
-CREATE TABLE usuario_perfil (
-    usuario_id BIGINT,
-    perfil_id BIGINT,
-    PRIMARY KEY (usuario_id, perfil_id),
-    FOREIGN KEY (usuario_id) REFERENCES usuario(id),
-    FOREIGN KEY (perfil_id) REFERENCES perfil(id)
+CREATE TABLE perfil_usuario (
+  perfil_id BIGINT NOT NULL,
+  usuario_id BIGINT NOT NULL,
+  PRIMARY KEY (perfil_id, usuario_id),
+  CONSTRAINT fk_perfil_usuario_perfil_id
+    FOREIGN KEY (perfil_id)
+    REFERENCES perfil (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_perfil_usuario_usuario_id
+    FOREIGN KEY (usuario_id)
+    REFERENCES usuario (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
 );
