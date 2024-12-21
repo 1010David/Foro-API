@@ -1,7 +1,8 @@
 package com.aluraoracle.api_foro.topico;
 
 
-import com.aluraoracle.api_foro.Estado;
+import com.aluraoracle.api_foro.curso.Curso;
+import com.aluraoracle.api_foro.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
