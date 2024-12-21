@@ -1,12 +1,11 @@
 package com.aluraoracle.api_foro.topico;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-
-public record DatosRegistroTopico(
+public record DatosRegistroTopico (
 
         @NotBlank(message = "El título no puede estar vacío")
         @Size(max = 100, message = "El título debe tener entre 1 y 100 caracteres")
@@ -17,9 +16,12 @@ public record DatosRegistroTopico(
         String mensaje,
 
         @NotNull(message = "El autor no puede estar vacío")
-        Long usuarioId,
+        @Positive(message = "El autor debe ser un número entro positivo")
+        Long autor,
 
         @NotNull(message = "El curso no puede estar vacío")
-        Long cursoId
+        @Positive(message = "El curso debe ser un número entro positivo")
+        Long curso
+
 ) {
 }

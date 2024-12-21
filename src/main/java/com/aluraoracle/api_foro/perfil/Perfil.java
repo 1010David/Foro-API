@@ -1,7 +1,7 @@
-package com.aluraoracle.api_foro.topico;
+package com.aluraoracle.api_foro.perfil;
 
 
-import com.aluraoracle.api_foro.Categoria;
+import com.aluraoracle.api_foro.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity()
-@Table( name = "curso",
-        uniqueConstraints = { @UniqueConstraint(name = "ui_curso_nombre", columnNames = {"nombre"}) }
+@Table( name = "perfil",
+        uniqueConstraints = { @UniqueConstraint(name = "ui_perfil_nombre", columnNames = {"nombre"}) }
 )
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Curso {
+public class Perfil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +28,8 @@ public class Curso {
     @Column(nullable=false, length=100)
     private String nombre;
 
-    @Column(nullable=false, length=50)
-    @Enumerated(EnumType.STRING)
-    private Categoria categoria;
-
-    @OneToMany(mappedBy = "curso", fetch = FetchType.LAZY)
-    private List<Topico> topicos = new ArrayList<>();
+    @ManyToMany(mappedBy = "perfiles", fetch = FetchType.LAZY)
+    @OrderBy("nombre ASC")
+    private List<Usuario> usuarios = new ArrayList<>();
 
 }

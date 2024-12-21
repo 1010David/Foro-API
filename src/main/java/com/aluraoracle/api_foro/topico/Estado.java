@@ -1,4 +1,4 @@
-package com.aluraoracle.api_foro;
+package com.aluraoracle.api_foro.topico;
 
 public enum Estado {
     ABIERTO,
