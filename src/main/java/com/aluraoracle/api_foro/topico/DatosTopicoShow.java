@@ -8,8 +8,8 @@ public record DatosTopicoShow(
         String mensaje,
         LocalDateTime fechacreacion,
         Estado estado,
-        Long autor,
-        Long curso
+        Long usuario,
+        String curso
 ) {
 
     public DatosTopicoShow(Topico topico) {
@@ -19,8 +19,8 @@ public record DatosTopicoShow(
                 topico.getMensaje(),
                 topico.getFechacreacion(),
                 topico.getEstado(),
-                topico.getAutor().getId(),
-                topico.getCurso().getId()
+                topico.getUsuario().getId(),
+                topico.getCurso() != null ? topico.getCurso().name() : "Curso no asignado"
         );
     }
 

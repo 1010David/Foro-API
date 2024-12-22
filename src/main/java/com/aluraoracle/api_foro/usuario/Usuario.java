@@ -46,7 +46,7 @@ public class Usuario {
     @OrderBy("nombre ASC")
     private List<Perfil> perfiles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Topico> topicos = new ArrayList<>();
 
     public Usuario(String nombre, String correoelectronico, String contrasena, Perfil perfil) {

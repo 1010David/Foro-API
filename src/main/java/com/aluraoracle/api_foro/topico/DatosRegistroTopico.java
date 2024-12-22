@@ -15,13 +15,12 @@ public record DatosRegistroTopico (
         @Size(max = 500, message = "El mensaje debe tener entre 1 y 500 caracteres")
         String mensaje,
 
-        @NotNull(message = "El autor no puede estar vacío")
-        @Positive(message = "El autor debe ser un número entro positivo")
-        Long autor,
+        @NotNull(message = "El usuario no puede estar vacío")
+        @Positive(message = "El usuario debe ser un número entero positivo")
+        Long usuario,
 
         @NotNull(message = "El curso no puede estar vacío")
-        @Positive(message = "El curso debe ser un número entro positivo")
-        Long curso
+        String curso
 
 ) {
 }
