@@ -3,10 +3,7 @@ package com.aluraoracle.api_foro.topico;
 import com.aluraoracle.api_foro.curso.Categoria;
 import com.aluraoracle.api_foro.usuario.Usuario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "topico",
         uniqueConstraints = {@UniqueConstraint(name = "ui_topico_titulo_mensaje", columnNames = {"titulo", "mensaje"})})
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -51,6 +49,9 @@ public class Topico {
         this.fechacreacion = LocalDateTime.now();
         this.estado = Estado.ABIERTO;
         this.usuario = usuario;
+        this.curso = curso;
+    }
+    public void setCategoria(Categoria curso) {
         this.curso = curso;
     }
 }

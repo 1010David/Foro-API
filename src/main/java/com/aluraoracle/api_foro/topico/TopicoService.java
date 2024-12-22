@@ -4,7 +4,14 @@ import com.aluraoracle.api_foro.curso.Categoria;
 import com.aluraoracle.api_foro.repository.CursoRepository;
 import com.aluraoracle.api_foro.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TopicoService {
@@ -19,29 +26,46 @@ public class TopicoService {
     private UsuarioRepository usuarioRepository;
 
     public Topico crear(DatosRegistroTopico datos) {
-        // Validar si el autor (usuario) existe
         if (!usuarioRepository.existsById(datos.usuario())) {
             throw new TopicoValidationException("usuario", "No existe usuario " + datos.usuario());
         }
 
-        // Validar si el curso existe y obtener el valor de la enumeración
-        Categoria categoria = Categoria.valueOf(datos.curso());  // Aquí se convierte el nombre del curso a una categoría
+        Categoria categoria = Categoria.valueOf(datos.curso());
 
-        // Validar si ya existe un tópico con el mismo título y mensaje
         if (topicoRepository.existsByTituloAndMensaje(datos.titulo(), datos.mensaje())) {
             throw new TopicoValidationException("topico", "Ya existe un tópico");
         }
 
-        // Obtener el objeto usuario desde la base de datos
         var usuario = usuarioRepository.getReferenceById(datos.usuario());
-
-        // Crear el nuevo tópico con la categoría obtenida de la enumeración
         var topico = new Topico(datos.titulo(), datos.mensaje(), usuario, categoria);
-
-        // Guardar el tópico en la base de datos
         topicoRepository.save(topico);
 
         return topico;
     }
 
+    public List<DatosTopicoShow> obtenerTodos() {
+        return topicoRepository.findAll().stream()
+                .map(DatosTopicoShow::new)
+                .collect(Collectors.toList());
+    }
+
+    public Topico editar(Long id, DatosRegistroTopico datosEditar) {
+        var topico = topicoRepository.findById(id)
+                .orElseThrow(() -> new TopicoValidationException("id", "Tópico no encontrado"));
+
+        topico.setTitulo(datosEditar.titulo());
+        topico.setMensaje(datosEditar.mensaje());
+        topico.setCategoria(Categoria.valueOf(datosEditar.curso()));
+
+        return topicoRepository.save(topico);
+    }
+
+    public void eliminar(Long id) {
+        Optional<Topico> topicoOptional = topicoRepository.findById(id);
+        if (topicoOptional.isPresent()) {
+            topicoRepository.deleteById(id);
+        } else {
+            throw new TopicoNotFoundException("Topico with id " + id + " not found");
+        }
+    }
 }
