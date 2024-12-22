@@ -4,6 +4,7 @@ package com.aluraoracle.api_foro.controller;
 import com.aluraoracle.api_foro.topico.DatosRegistroTopico;
 import com.aluraoracle.api_foro.topico.DatosTopicoShow;
 import com.aluraoracle.api_foro.topico.TopicoService;
+import com.aluraoracle.api_foro.topico.TopicoValidationException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+
 @RestController
 @RequestMapping("/topico")
 public class TopicoController {
@@ -25,11 +27,24 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DatosTopicoShow> crear(
+    public ResponseEntity<?> crear(
             @RequestBody @Valid DatosRegistroTopico datosCrear,
             UriComponentsBuilder uriComponentsBuilder) {
-        var datosVer = new DatosTopicoShow(topicoService.crear(datosCrear));
-        URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(datosVer.id()).toUri();
-        return ResponseEntity.created(url).body(datosVer);
+        try {
+            // Llamar al servicio para crear un nuevo tópico
+            var topico = topicoService.crear(datosCrear);
+
+            // Generar la URL del nuevo recurso
+            URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
+
+            // Retornar la respuesta con los datos del tópico creado
+            return ResponseEntity.created(url).body(new DatosTopicoShow(topico));
+
+        } catch (TopicoValidationException e) {
+            // Manejar excepciones personalizadas y retornar un código HTTP 400
+            return ResponseEntity.badRequest()
+                    .body("Error en el campo: " + e.getCampo() + ". " + e.getMensaje());
+        }
     }
 }
+

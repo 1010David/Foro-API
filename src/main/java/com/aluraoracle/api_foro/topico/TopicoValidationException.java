@@ -19,4 +19,5 @@ public class TopicoValidationException extends RuntimeException {
     public String getMensaje() {
         return mensaje;
     }
+
 }

@@ -26,7 +26,7 @@ CREATE TABLE curso (
   UNIQUE INDEX ui_curso_nombre (nombre ASC) VISIBLE
 );
 
--- Tabla Topico
+-- Tabla Topico (modificada)
 CREATE TABLE topico (
   id BIGINT NOT NULL AUTO_INCREMENT,
   titulo VARCHAR(100) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE topico (
   fechacreacion DATETIME NOT NULL,
   estado VARCHAR(50) NOT NULL,
   usuario_id BIGINT NOT NULL,
-  curso_id BIGINT NOT NULL,
+  curso_id BIGINT NULL, -- Cambiado de NOT NULL a NULL
   PRIMARY KEY (id),
   UNIQUE INDEX ui_topico_titulo_mensaje (titulo ASC, mensaje ASC) VISIBLE,
   CONSTRAINT fk_topico_usuario_id
@@ -45,7 +45,7 @@ CREATE TABLE topico (
   CONSTRAINT fk_topico_curso_id
     FOREIGN KEY (curso_id)
     REFERENCES curso (id)
-    ON DELETE NO ACTION
+    ON DELETE SET NULL  -- Modificado para permitir que se borre el curso asociado
     ON UPDATE NO ACTION
 );
 
