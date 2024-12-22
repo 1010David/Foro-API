@@ -20,4 +20,5 @@ public class TopicoValidationException extends RuntimeException {
         return mensaje;
     }
 
+
 }
