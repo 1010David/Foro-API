@@ -1,4 +1,7 @@
-package com.aluraoracle.api_foro.topico;
+package com.aluraoracle.api_foro.topico.record;
+
+import com.aluraoracle.api_foro.topico.Estado;
+import com.aluraoracle.api_foro.topico.Topico;
 
 import java.time.LocalDateTime;
 
