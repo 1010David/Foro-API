@@ -3,10 +3,8 @@ package com.aluraoracle.api_foro.usuario;
 import com.aluraoracle.api_foro.perfil.Perfil;
 import com.aluraoracle.api_foro.topico.Topico;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +16,7 @@ import java.util.List;
                 @UniqueConstraint(name = "ui_usuario_correoelectronico", columnNames = {"correoelectronico"})
         }
 )
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,7 +48,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Topico> topicos = new ArrayList<>();
 
-    public Usuario(String nombre, String correoelectronico, String contrasena, Perfil perfil) {
+    public Usuario(String nombre, String correoelectronico, String contrasena, @NotNull(message = "El perfil no puede estar vacío") Perfil perfil) {
         this.nombre = nombre;
         this.correoelectronico = correoelectronico;
         this.contrasena = contrasena;
@@ -60,5 +59,8 @@ public class Usuario {
         this.nombre = nombre;
         this.correoelectronico = correoelectronico;
         this.contrasena = contrasena;
+    }
+
+    public void setPerfil(Perfil perfil) {
     }
 }

@@ -1,4 +1,4 @@
-package com.aluraoracle.api_foro.topico;
+package com.aluraoracle.api_foro.topico.exceptions;
 
 
 public class TopicoValidationException extends RuntimeException {

@@ -1,6 +1,10 @@
 package com.aluraoracle.api_foro.controller;
 
+import com.aluraoracle.api_foro.topico.record.DatosTopicoShow;
+import com.aluraoracle.api_foro.topico.exceptions.TopicoNotFoundException;
+import com.aluraoracle.api_foro.topico.exceptions.TopicoValidationException;
 import com.aluraoracle.api_foro.topico.*;
+import com.aluraoracle.api_foro.topico.record.DatosRegistroTopico;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/topico")
