@@ -3,7 +3,6 @@ package com.aluraoracle.api_foro.usuario;
 import com.aluraoracle.api_foro.perfil.Perfil;
 import com.aluraoracle.api_foro.perfil.PerfilNotFoundException;
 import com.aluraoracle.api_foro.perfil.PerfilRepository;
-import com.aluraoracle.api_foro.topico.Topico;
 import com.aluraoracle.api_foro.topico.TopicoRepository;
 import com.aluraoracle.api_foro.usuario.exceptions.UsuarioNotFoundException;
 import com.aluraoracle.api_foro.usuario.exceptions.UsuarioValidationException;
@@ -53,7 +52,7 @@ public class UsuarioService {
         usuario.setNombre(datos.nombre());
         usuario.setCorreoelectronico(datos.correoelectronico());
         usuario.setContrasena(datos.contrasena());
-        // Assuming Perfil is an entity and you have a method to find it by name
+        // Assuming Perfil is an entity, and you have a method to find it by name
         Perfil perfil = perfilRepository.findByNombre(datos.perfil())
                 .orElseThrow(() -> new PerfilNotFoundException("Perfil not found: " + datos.perfil()));
         usuario.setPerfil(perfil);
