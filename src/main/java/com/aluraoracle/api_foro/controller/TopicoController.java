@@ -1,9 +1,9 @@
 package com.aluraoracle.api_foro.controller;
 
+import com.aluraoracle.api_foro.topico.exceptions.TopicoValidationException;
 import com.aluraoracle.api_foro.topico.record.DatosTopicoShow;
 import com.aluraoracle.api_foro.topico.exceptions.TopicoNotFoundException;
-import com.aluraoracle.api_foro.topico.exceptions.TopicoValidationException;
-import com.aluraoracle.api_foro.topico.*;
+import com.aluraoracle.api_foro.topico.TopicoService;
 import com.aluraoracle.api_foro.topico.record.DatosRegistroTopico;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/topico")
+@RequestMapping("/topicos")
 public class TopicoController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class TopicoController {
             UriComponentsBuilder uriComponentsBuilder) {
         try {
             var topico = topicoService.crear(datosCrear);
-            URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
+            URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
             return ResponseEntity.created(url).body(new DatosTopicoShow(topico));
         } catch (TopicoValidationException e) {
             return ResponseEntity.badRequest()
@@ -57,6 +57,16 @@ public class TopicoController {
         try {
             topicoService.eliminar(id);
             return ResponseEntity.noContent().build();
+        } catch (TopicoNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosTopicoShow> obtenerPorId(@PathVariable Long id) {
+        try {
+            var topico = topicoService.obtenerPorId(id);
+            return ResponseEntity.ok(new DatosTopicoShow(topico));
         } catch (TopicoNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

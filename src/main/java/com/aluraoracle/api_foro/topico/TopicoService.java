@@ -69,4 +69,10 @@ public class TopicoService {
             throw new TopicoNotFoundException("Topico with id " + id + " not found");
         }
     }
+
+
+    public Topico obtenerPorId(Long id) {
+        return topicoRepository.findById(id)
+                .orElseThrow(() -> new TopicoNotFoundException("Topico not found with id: " + id));
+    }
 }
