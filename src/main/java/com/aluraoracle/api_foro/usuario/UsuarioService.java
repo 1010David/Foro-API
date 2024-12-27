@@ -12,15 +12,18 @@ import com.aluraoracle.api_foro.usuario.record.DatosUsuarioShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UsuarioService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private TopicoRepository topicoRepository;
-
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -33,7 +36,7 @@ public class UsuarioService {
             throw new UsuarioValidationException("nombre", "Ya existe un usuario con ese nombre");
         }
 
-        var usuario = new Usuario(datos.nombre(), datos.correoelectronico(), datos.contrasena(), datos.perfil());
+        var usuario = new Usuario(datos.nombre(), datos.correoelectronico(), passwordEncoder.encode(datos.contrasena()), datos.perfil());
         usuarioRepository.save(usuario);
 
         return usuario;
@@ -46,13 +49,11 @@ public class UsuarioService {
     }
 
     public Usuario editar(Long id, DatosEditarUsuario datos) {
-        // Implementation for editing a user with DatosEditarUsuario
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("Usuario not found with id: " + id));
         usuario.setNombre(datos.nombre());
         usuario.setCorreoelectronico(datos.correoelectronico());
-        usuario.setContrasena(datos.contrasena());
-        // Assuming Perfil is an entity, and you have a method to find it by name
+        usuario.setContrasena(passwordEncoder.encode(datos.contrasena()));
         Perfil perfil = perfilRepository.findByNombre(datos.perfil())
                 .orElseThrow(() -> new PerfilNotFoundException("Perfil not found: " + datos.perfil()));
         usuario.setPerfil(perfil);
@@ -61,9 +62,12 @@ public class UsuarioService {
 
     @Transactional
     public void eliminar(Long id) {
-        // Delete related Topico records first
         topicoRepository.deleteByUsuarioId(id);
-        // Then delete the Usuario
         usuarioRepository.deleteById(id);
+    }
+
+    public void saveUsuario(Usuario usuario) {
+        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        usuarioRepository.save(usuario);
     }
 }
