@@ -1,6 +1,5 @@
 package com.aluraoracle.api_foro.infra.security;
 
-import com.aluraoracle.api_foro.usuario.Usuario;
 import com.aluraoracle.api_foro.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
